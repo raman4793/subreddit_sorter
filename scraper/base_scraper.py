@@ -11,11 +11,11 @@ class BaseScraper(abc.ABC):
 
     def get_posts(self, *, subreddits: list, limit=100):
         for subreddit in subreddits:
-            yield self._get_posts(subreddit=subreddit)
+            yield self._get_posts(subreddit=subreddit, limit=limit)
 
     def get_comments(self, *, posts: list, limit=100):
         for post in posts:
-            yield self._get_comments(post=post)
+            yield self._get_comments(post=post, limit=limit)
 
     @abc.abstractmethod
     def _get_posts(self, *, subreddit: dict, limit=100):
