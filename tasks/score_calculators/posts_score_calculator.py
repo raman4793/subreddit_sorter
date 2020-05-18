@@ -1,8 +1,5 @@
 import luigi
-import datetime
-
 from pymongo import UpdateOne
-from tqdm.gui import tqdm
 
 from configuration import Configuration
 from score_calculator import get_post_score_calculator
