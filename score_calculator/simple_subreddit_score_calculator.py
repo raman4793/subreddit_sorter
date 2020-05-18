@@ -14,7 +14,7 @@ class SimpleSubredditScoreCalculator(BaseCalculator):
             raise InvalidArgumentValue("post should be a dictionary")
         if type(posts_data_frame) is not pd.DataFrame:
             raise InvalidArgumentValue("comments data frame needs a pandas data frame")
-        if posts_data_frame.dtypes["ups"] != numpy.float:
+        if posts_data_frame.dtypes["ups"] != numpy.int:
             raise InvalidArgumentValue("comments data frame contains invalid data")
         subreddit["score"] = sum(posts_data_frame["score"] / posts_data_frame["score"].count())
         return subreddit
