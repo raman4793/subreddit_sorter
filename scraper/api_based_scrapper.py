@@ -1,5 +1,3 @@
-import json
-
 import prawcore
 
 from .base_scraper import BaseScraper
@@ -23,7 +21,7 @@ class APIScrapper(BaseScraper):
         with prawcore.session(self.authorizer) as session:
             data = session.request("GET", "/best.json?limit={}".format(limit))
             for subreddit in data["data"]["children"]:
-                yield SubredditSchema().loads(json_data=json.dumps(subreddit["data"]))
+                yield SubredditSchema().load(data=subreddit["data"])
 
     def _get_posts(self, *, subreddit: dict, limit=50):
         assert type(subreddit) is dict
@@ -31,7 +29,7 @@ class APIScrapper(BaseScraper):
             with prawcore.session(self.authorizer) as session:
                 data = session.request('GET', "{}.json?limit={}".format(subreddit["subreddit_name_prefixed"], limit))
                 for post_data in data["data"]["children"]:
-                    yield PostSchema().loads(json_data=json.dumps(post_data["data"]))
+                    yield PostSchema().load(data=post_data["data"])
         except Exception:
             return None
 
@@ -42,6 +40,6 @@ class APIScrapper(BaseScraper):
                 api_end_point = post["permalink"][:-1]
                 data = session.request("GET", "{}?limit={}".format(api_end_point, limit))
                 for comment_data in data[1]["data"]["children"]:
-                    yield CommentSchema().loads(json_data=json.dumps(comment_data["data"]))
+                    yield CommentSchema().load(data=comment_data["data"])
         except Exception:
             return None

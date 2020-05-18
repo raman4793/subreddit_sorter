@@ -1,5 +1,8 @@
 import abc
 
+from configuration import Configuration
+from exceptions.exceptions import InvalidArgumentValue
+
 
 class BaseScraper(abc.ABC):
     def __init__(self, *args, **kwargs):
@@ -24,3 +27,8 @@ class BaseScraper(abc.ABC):
     @abc.abstractmethod
     def _get_comments(self, *, post: dict, limit=100):
         pass
+
+    @staticmethod
+    def validate_limit(limit):
+        if type(limit) is not int or limit <= 0 or limit > Configuration.max_limit:
+            raise InvalidArgumentValue("Limit has to be a positive integer below {}".format(Configuration.max_limit))

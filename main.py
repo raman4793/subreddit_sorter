@@ -13,4 +13,5 @@ def pipeline():
 
 
 if __name__ == '__main__':
+    Configuration().validate()
     pipeline()
