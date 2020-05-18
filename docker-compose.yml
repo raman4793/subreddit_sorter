@@ -1,0 +1,49 @@
+version: '3.4'
+
+services:
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ramachandranrishi/reddit_pipeline
+    environment:
+
+      scraper_type: "1"
+
+      max_limit: "20"
+
+      max_subreddit_limit: "20"
+      max_posts_limit: "15"
+      max_comments_limit: "10"
+
+      subreddit_limit: "15"
+      posts_limit: "10"
+      comments_limit: "5"
+
+      mongo_host: "localhost"
+
+      subreddits_collection_name: "subreddits"
+      posts_collection_name: "posts"
+      comments_collection_name: "comments"
+      history_collection_name: "history"
+
+      pipeline_run_frequency_in_hours: "1"
+      use_all: "0"
+      ignore_negative_scores: "1"
+    network_mode: "host"
+    command: RangeHourly
+    depends_on:
+      - database
+
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile
+    image: ramachandranrishi/api
+    network_mode: "host"
+    depends_on:
+      - database
+
+  database:
+    image: mongo
+    network_mode: "host"
