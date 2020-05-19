@@ -5,18 +5,18 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    image: ramachandranrishi/reddit_pipeline
+    image: ramachandranattinad/allianz-pipeline
     environment:
 
       scraper_type: "1"
 
-      max_limit: "20"
+      max_limit: "100"
 
-      max_subreddit_limit: "20"
-      max_posts_limit: "15"
-      max_comments_limit: "10"
+      max_subreddit_limit: "100"
+      max_posts_limit: "50"
+      max_comments_limit: "25"
 
-      subreddit_limit: "15"
+      subreddit_limit: "50"
       posts_limit: "10"
       comments_limit: "5"
 
@@ -33,13 +33,22 @@ services:
     network_mode: "host"
     command: RangeHourly
     depends_on:
-      - database
+      - frontend
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    image: ramachandranattinad/allianz-frontend
+    network_mode: host
+    depends_on:
+      - api
 
   api:
     build:
       context: api
       dockerfile: Dockerfile
-    image: ramachandranrishi/api
+    image: ramachandranattinad/allianz-api
     network_mode: "host"
     depends_on:
       - database
