@@ -1,9 +1,10 @@
 import flask
 from flask import jsonify
+from flask_cors import CORS
 from pymongo import MongoClient
 
 app = flask.Flask(__name__)
-
+CORS(app)
 mongo_client = MongoClient(host="localhost")
 
 
