@@ -6,11 +6,18 @@
 $ docker-compose build
 ```
 
+or alternatively
+
+```sh
+$ docker-compose pull
+```
+
 ### Run
 ```sh
 $ docker-compose up -d
 ```
-##### Click [localhost:3000/v1/subreddits](http://localhost:3000/v1/subreddits) to see the result of the run
+##### Click [localhost:5000/v1/subreddits](http://localhost:5000/v1/subreddits) to see the result of the run
+##### Click [localhost](http://localhost) to see the dashboard
 
 ### Test
 ```sh
