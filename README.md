@@ -16,6 +16,12 @@ $ docker-compose up -d
 ```sh
 $ bash test.sh
 ```
+### To generate docs
+```sh
+$ cd docs
+$ sphinx-apidoc -o rst ..
+$ make html
+```
 # Configuration
 ### max_limit 
 Max limit is the maximum limit that can be passed to the scraper, reddit apis seems to have 100 as their max limit in one api call.
