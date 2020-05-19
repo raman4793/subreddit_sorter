@@ -1,5 +1,3 @@
-from time import time
-
 from marshmallow import Schema, fields, EXCLUDE, post_load
 
 
@@ -15,8 +13,6 @@ class SubredditSchema(Schema):
 
     @post_load
     def clean_data(self, data, **kwargs):
-        if not data.get("_id"):
-            data["_id"] = "{}_{}".format(time(), data["id"])
         data["score"] = 0.0
         return data
 

@@ -12,15 +12,15 @@ services:
 
       max_limit: "100"
 
-      max_subreddit_limit: "100"
-      max_posts_limit: "50"
-      max_comments_limit: "25"
+      max_subreddit_limit: "50"
+      max_posts_limit: "25"
+      max_comments_limit: "20"
 
-      subreddit_limit: "50"
-      posts_limit: "10"
-      comments_limit: "5"
+      subreddit_limit: "25"
+      posts_limit: "20"
+      comments_limit: "15"
 
-      mongo_host: "localhost"
+      mongo_host: "0.0.0.0"
 
       subreddits_collection_name: "subreddits"
       posts_collection_name: "posts"
@@ -55,4 +55,6 @@ services:
 
   database:
     image: mongo
+    volumes:
+      - ./data:/data/db
     network_mode: "host"

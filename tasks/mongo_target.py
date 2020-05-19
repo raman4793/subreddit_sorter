@@ -22,8 +22,7 @@ class CustomMongoTarget(MongoTarget):
         data = {"last_run_at": job_id, "_id": self.task_name}
         if operation_count:
             data["operation_count"] = operation_count
-        self.get_index()["meta_store"].insert_one(
-            data)
+        self.get_index()["meta_store"].update({"_id": self.task_name}, {"$set": data}, upsert=True)
 
     def upsert(self, value, query):
         value = {"$set": value}
