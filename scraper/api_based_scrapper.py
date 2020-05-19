@@ -7,8 +7,14 @@ from .models.subreddit_schema import SubredditSchema
 
 
 class APIScrapper(BaseScraper):
+    """
+    Reddit API based scraper
+    """
 
     def __init__(self, *args, **kwargs):
+        """
+        Reddit scraper initializer
+        """
         super().__init__(*args, **kwargs)
         authenticator = prawcore.TrustedAuthenticator(
             prawcore.Requestor("prawcore_read_only_example"),
@@ -18,12 +24,24 @@ class APIScrapper(BaseScraper):
         self.authorizer.refresh()
 
     def get_subreddits(self, *, limit=100):
+        """
+        Overridden get subreddits method inherted from BaseScraper that returns a generator that has validated
+        subreddit dictionary
+        :param limit: (int)
+        :return: subreddit: (generator)
+        """
         with prawcore.session(self.authorizer) as session:
             data = session.request("GET", "/best.json?limit={}".format(limit))
             for subreddit in data["data"]["children"]:
                 yield SubredditSchema().load(data=subreddit["data"])
 
     def _get_posts(self, *, subreddit: dict, limit=50):
+        """
+        Overridden method from BaseScraper that yields posts for a single subreddit dictionary
+        :param subreddit: (dict) subreddit dictionary
+        :param limit: (int) number of posts to be retrieved
+        :return: post: (generator)
+        """
         assert type(subreddit) is dict
         try:
             with prawcore.session(self.authorizer) as session:
@@ -34,6 +52,12 @@ class APIScrapper(BaseScraper):
             return None
 
     def _get_comments(self, *, post: dict, limit=25):
+        """
+        Overridden method from BaseScraper that yields comments for a single post dictionary
+        :param post: (dict) post dictionary
+        :param limit: (int) number of comments to be retrieved
+        :return: comment: (generator)
+        """
         assert type(post) is dict
         try:
             with prawcore.session(self.authorizer) as session:

@@ -5,6 +5,11 @@ import pandas as pd
 
 
 def model_to_data_frame(models: list):
+    """
+    Converts a list of dictionaries or an iterator with dictionaries to a data frame
+    :param models: (iterator) An iterator over CommentSchema or PostSchema or SubredditSchema
+    :return: model_data_frame: (pandas.DataFrame)
+    """
     if type(models) is list:
         model_data_frame = pd.DataFrame(columns=models[0].keys(), data=models)
     else:
@@ -19,6 +24,12 @@ def model_to_data_frame(models: list):
 
 
 def timed(func):
+    """
+    A decorator that prints the time it took to execute the funtion it was decorated with
+    :param func:
+    :return:
+    """
+
     @wraps(func)
     def timed_function(*args, **kwargs):
         start_time = time.time()
@@ -31,6 +42,13 @@ def timed(func):
 
 
 def append_job_id_to_model(models, job_id):
+    """
+    A simple method to add job_id key to a list of dictionaries
+    :param models:
+    :param job_id:
+    :return:
+    """
+
     def append_job_id(model):
         model["job_id"] = job_id
         return model

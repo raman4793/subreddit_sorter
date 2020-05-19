@@ -7,12 +7,25 @@ from .models.subreddit_schema import SubredditSchema
 
 
 class FileScrapper(BaseScraper):
+    """
+    A file based scraper if passed a cache folder path would return json much like the reddit api
+    """
 
     def __init__(self, *args, **kwargs):
+        """
+        File scraper initializer
+        :param cache_folder: Folder location of the cache folder, default value is cache
+        """
         super().__init__(*args, **kwargs)
         self.cache_folder = kwargs.get("cache_folder", "cache")
 
     def get_subreddits(self, *, limit=100):
+        """
+        Overridden get subreddits method inherted from BaseScraper that returns a generator that has validated
+        subreddit dictionary
+        :param limit: (int)
+        :return: subreddit: (generator)
+        """
         self.validate_limit(limit)
         data = json.load(open("{}/subreddit_list.json".format(self.cache_folder), "r"))
         for index, subreddit in enumerate(data["data"]["children"]):
@@ -21,6 +34,12 @@ class FileScrapper(BaseScraper):
             yield SubredditSchema().loads(json_data=json.dumps(subreddit["data"]))
 
     def _get_posts(self, *, subreddit: dict, limit=100):
+        """
+        Overridden method from BaseScraper that yields posts for a single subreddit dictionary
+        :param subreddit: (dict) subreddit dictionary
+        :param limit: (int) number of posts to be retrieved
+        :return: post: (generator)
+        """
         self.validate_limit(limit)
         assert type(subreddit) is dict
         try:
@@ -33,6 +52,12 @@ class FileScrapper(BaseScraper):
             return None
 
     def _get_comments(self, *, post: dict, limit=100):
+        """
+        Overridden method from BaseScraper that yields comments for a single post dictionary
+        :param post: (dict) post dictionary
+        :param limit: (int) number of comments to be retrieved
+        :return: comment: (generator)
+        """
         self.validate_limit(limit)
         assert type(post) is dict
         try:
