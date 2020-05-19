@@ -1,0 +1,60 @@
+version: '3.4'
+
+services:
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ramachandranattinad/allianz-pipeline
+    environment:
+
+      scraper_type: "1"
+
+      max_limit: "100"
+
+      max_subreddit_limit: "50"
+      max_posts_limit: "25"
+      max_comments_limit: "20"
+
+      subreddit_limit: "25"
+      posts_limit: "20"
+      comments_limit: "15"
+
+      mongo_host: "0.0.0.0"
+
+      subreddits_collection_name: "subreddits"
+      posts_collection_name: "posts"
+      comments_collection_name: "comments"
+      history_collection_name: "history"
+
+      pipeline_run_frequency_in_hours: "1"
+      use_all: "0"
+      ignore_negative_scores: "1"
+    network_mode: "host"
+    command: RangeHourly
+    depends_on:
+      - frontend
+
+  frontend:
+    build:
+      context: frontend
+      dockerfile: Dockerfile
+    image: ramachandranattinad/allianz-frontend
+    network_mode: host
+    depends_on:
+      - api
+
+  api:
+    build:
+      context: api
+      dockerfile: Dockerfile
+    image: ramachandranattinad/allianz-api
+    network_mode: "host"
+    depends_on:
+      - database
+
+  database:
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    network_mode: "host"
