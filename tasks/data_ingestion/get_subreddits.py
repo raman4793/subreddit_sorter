@@ -19,7 +19,9 @@ class GetSubs(luigi.Task):
         subreddits = [subreddit for subreddit in subreddits]
         subreddits = append_job_id_to_model(models=subreddits, job_id=self.job_id)
         if subreddits:
-            self.output().write(values=subreddits)
+            for subreddit in subreddits:
+                query = {"job_id": self.job_id, "subreddit": subreddit["subreddit"]}
+                self.output().upsert(value=subreddit, query=query)
         self.output().mark_done(job_id=self.job_id)
 
     def output(self):

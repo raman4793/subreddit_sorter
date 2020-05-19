@@ -1,6 +1,5 @@
-import time
 import datetime
-from configuration import Configuration
+
 from luigi.contrib.mongodb import MongoTarget
 
 
@@ -25,6 +24,10 @@ class CustomMongoTarget(MongoTarget):
             data["operation_count"] = operation_count
         self.get_index()["meta_store"].insert_one(
             data)
+
+    def upsert(self, value, query):
+        value = {"$set": value}
+        return self.get_collection().update(query, value, upsert=True)
 
     def exists(self):
         expected_previous_run_date_time = datetime.datetime.now() - datetime.timedelta(hours=1)
