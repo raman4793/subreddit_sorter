@@ -6,10 +6,20 @@ from .base_calculator import BaseCalculator
 
 
 class SimplePostScoreCalculator(BaseCalculator):
+    """
+    A point score calculator implementation
+    """
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def score(self, *, post, comments_data_frame: pd.DataFrame):
+        """
+        Overriding score to calculate score of the subreddit dictionary passed in with the formula specified in the requirement doc
+        :param post: The post dictionary whose score is to be calculated
+        :param comments_data_frame: A data frame with the comment of that post
+        :return: post: post dictionary after adding score
+        """
         if type(post) is not dict:
             raise InvalidArgumentValue("post should be a dictionary")
         if type(comments_data_frame) is not pd.DataFrame:
